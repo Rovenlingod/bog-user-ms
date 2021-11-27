@@ -1,8 +1,10 @@
 package com.example.boguserms.service;
 
 import com.example.boguserms.domain.User;
+import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.exception.InvalidUUIDException;
 import com.example.boguserms.exception.NonexistentUserException;
+import com.example.boguserms.mapper.UserMapper;
 import com.example.boguserms.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUserId(String userId) {
+    public UserResponseDTO findByUserId(String userId) {
         try {
             Optional<User> user = userRepository.findById(UUID.fromString(userId));
             if (user.isPresent())
-                return user.get();
+                return UserMapper.INSTANCE.UserToUserResponseDTO(user.get());
             else
                 throw new NonexistentUserException("User was not found!");
         } catch(IllegalArgumentException illegalArgumentException) {

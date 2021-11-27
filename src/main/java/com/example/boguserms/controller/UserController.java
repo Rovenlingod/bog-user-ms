@@ -1,14 +1,13 @@
 package com.example.boguserms.controller;
 
 import com.example.boguserms.domain.User;
-import com.example.boguserms.exception.InvalidUUIDException;
+import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -25,12 +24,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/{user_id}")
-    public ResponseEntity getEventById(@PathVariable(value = "user_id") String userId) {
+    public ResponseEntity<UserResponseDTO> getEventById(@PathVariable(value = "user_id") String userId) {
         return ResponseEntity.ok().body(userService.findByUserId(userId));
     }
 
     @PatchMapping(path = "/user")
-    public ResponseEntity updateUser(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
