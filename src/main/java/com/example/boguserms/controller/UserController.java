@@ -1,6 +1,7 @@
 package com.example.boguserms.controller;
 
 import com.example.boguserms.domain.User;
+import com.example.boguserms.dto.UserRequestDTO;
 import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/user")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequestDTO));
     }
 
     @GetMapping(path = "/user/{user_id}")
@@ -29,9 +29,8 @@ public class UserController {
     }
 
     @PatchMapping(path = "/user")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody User user) {
-        userService.updateUser(user);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateUser(userRequestDTO));
     }
 
 //    @DeleteMapping(path = "/user/{user_id}")
