@@ -10,7 +10,7 @@ import com.example.boguserms.mapper.UserMapper;
 import com.example.boguserms.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Service
@@ -24,10 +24,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO findByUserId(String userId) {
         try {
-            Optional<User> user = userRepository.findById(UUID.fromString(userId));
-            if (!user.isPresent())
-                throw new NonexistentUserException("User was not found!");
-            return UserMapper.INSTANCE.UserToUserResponseDTO(user.get());
+            User user = userRepository
+                    .findById(UUID.fromString(userId))
+                    .orElseThrow(() -> new NonexistentUserException("User with id = " + userId + " does not exist"));
+            return UserMapper.INSTANCE.UserToUserResponseDTO(user);
         } catch (IllegalArgumentException illegalArgumentException) {
             throw new InvalidUUIDException("User id is invalid!");
         }
@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO findByUserLogin(String login) {
-        Optional<User> user = userRepository.findByLogin(login);
-        return user.map(UserMapper.INSTANCE::UserToUserResponseDTO).orElse(null);
+        User user = userRepository.findByLogin(login);
+        return UserMapper.INSTANCE.UserToUserResponseDTO(user);
     }
 
     @Override

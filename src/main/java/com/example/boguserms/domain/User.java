@@ -6,6 +6,10 @@ import lombok.NonNull;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @Entity
@@ -13,24 +17,25 @@ import java.util.UUID;
 @Table(name = "user")
 @NoArgsConstructor
 public class User {
+
     @Id
     @Column(name = "user_id")
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy ="org.hibernate.id.UUIDGenerator")
     private UUID userId;
+
     @Column(name = "login")
-    @NonNull
     private String login;
+
     @Column(name = "password")
-    @NonNull
     private String password;
+
     @Column(name = "email")
-    @NonNull
     private String email;
+
     @Column(name = "firstName")
-    @NonNull
     private String firstName;
+
     @Column(name = "lastName")
-    @NonNull
     private String lastName;
 }

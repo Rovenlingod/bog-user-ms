@@ -1,16 +1,21 @@
 package com.example.boguserms.controller;
 
-import com.example.boguserms.domain.User;
 import com.example.boguserms.dto.UserRequestDTO;
 import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import java.net.URI;
 
 @Controller
+@Validated
 public class UserController {
     private UserService userService;
 
@@ -19,17 +24,19 @@ public class UserController {
     }
 
     @PostMapping(path = "/user")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequestDTO));
+    public ResponseEntity<Object> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+        String id = userService.createUser(userRequestDTO).getUserId();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping(path = "/user/{user_id}")
-    public ResponseEntity<UserResponseDTO> getEventById(@PathVariable(value = "user_id") String userId) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(value = "user_id") @Pattern(regexp = "^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$") String userId) {
         return ResponseEntity.ok().body(userService.findByUserId(userId));
     }
 
     @PatchMapping(path = "/user")
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<UserResponseDTO> updateUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(userService.updateUser(userRequestDTO));
     }
 
