@@ -35,28 +35,26 @@ public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
 
-/*    @Override
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        System.out.println(Arrays.toString(e.getSuppressed()));
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("exception", e.getClass().toString());
-        responseBody.put("message", e.getMessage());
-        System.out.println(322);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
-    }*/
+//    @Override
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        System.out.println(Arrays.toString(e.getSuppressed()));
+//        Map<String, Object> responseBody = new HashMap<>();
+//        responseBody.put("exception", e.getClass().toString());
+//        responseBody.put("message", e.getMessage());
+//        System.out.println(322);
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+//    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
-
-        //Get all errors
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(x -> Objects.requireNonNull(x.getRejectedValue()).toString() + " " + x.getDefaultMessage())
+                .map(x -> x.getField() + " " + x.getDefaultMessage())
                 .collect(Collectors.toList());
         body.put("errors", errors);
 
