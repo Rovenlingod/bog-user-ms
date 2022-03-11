@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,13 +44,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginSearchResponseDTO findByUserLogin(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = userRepository
+                .findByLogin(login)
+                .orElseThrow(() -> new NonexistentUserException("User with login = " + login + " does not exist"));
         return userMapper.toLoginDTO(user);
     }
 
     @Override
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        if (findByUserLogin(userRequestDTO.getLogin()) != null)
+        if (userRepository.findByLogin(userRequestDTO.getLogin()).isPresent())
             throw new UserAlreadyExistsException("User already exists in database!");
         User user = userRepository.save(userMapper.UserRequestDTOToUser(userRequestDTO));
         return userMapper.UserToUserResponseDTO(user);
