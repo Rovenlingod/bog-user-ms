@@ -1,6 +1,7 @@
 package com.example.boguserms.controller;
 
 import com.example.boguserms.dto.LoginSearchResponseDTO;
+import com.example.boguserms.dto.OAuthUserDTO;
 import com.example.boguserms.dto.UserRequestDTO;
 import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.service.UserService;
@@ -47,6 +48,10 @@ public class UserController {
         return ResponseEntity.ok().body(userService.findByUserLogin(login));
     }
 
+    @PostMapping("/oauth")
+    public ResponseEntity<UserResponseDTO> saveOrUpdateOAuthUser(@RequestBody OAuthUserDTO oAuthUserDTO) {
+        return ResponseEntity.ok().body(userService.updateOauthUser(oAuthUserDTO));
+    }
 //    @DeleteMapping(path = "/user/{user_id}")
 //    public ResponseEntity deleteUser(@PathVariable("user_id") String userId) {
 //        userService.deleteUser(userService.findByUserId(UUID.fromString(userId))));

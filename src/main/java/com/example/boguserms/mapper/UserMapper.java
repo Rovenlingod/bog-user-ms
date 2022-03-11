@@ -2,6 +2,7 @@ package com.example.boguserms.mapper;
 
 import com.example.boguserms.domain.User;
 import com.example.boguserms.dto.LoginSearchResponseDTO;
+import com.example.boguserms.dto.OAuthUserDTO;
 import com.example.boguserms.dto.UserRequestDTO;
 import com.example.boguserms.dto.UserResponseDTO;
 import org.mapstruct.Mapper;
@@ -31,6 +32,13 @@ public abstract class UserMapper {
 
     @Mapping(target = "password", source = "password", qualifiedByName = "encryptPassword")
     public abstract User UserRequestDTOToUser(UserRequestDTO userRequestDTO);
+
+    @Mappings({
+            @Mapping(target = "login", source = "email"),
+            @Mapping(target = "firstName", source = "name"),
+            @Mapping(target = "password", expression = "java(this.encryptPassword(java.util.UUID.randomUUID().toString()))")
+    })
+    public abstract User oAuthDTOToUser(OAuthUserDTO oAuthUserDTO);
 
     @Named("encryptPassword")
     protected String encryptPassword(String password) {

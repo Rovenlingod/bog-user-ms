@@ -2,6 +2,7 @@ package com.example.boguserms.service;
 
 import com.example.boguserms.domain.User;
 import com.example.boguserms.dto.LoginSearchResponseDTO;
+import com.example.boguserms.dto.OAuthUserDTO;
 import com.example.boguserms.dto.UserRequestDTO;
 import com.example.boguserms.dto.UserResponseDTO;
 import com.example.boguserms.exception.InvalidUUIDException;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -59,7 +61,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.UserToUserResponseDTO(user);
     }
 
-//    @Override
+    @Override
+    public UserResponseDTO updateOauthUser(OAuthUserDTO oAuthUserDTO) {
+        User user = userRepository.findByLogin(oAuthUserDTO.getEmail());
+        if (Objects.isNull(user)) {
+            user = userMapper.oAuthDTOToUser(oAuthUserDTO);
+        }
+        return userMapper.UserToUserResponseDTO(userRepository.save(user));
+    }
+
+    //    @Override
 //    public void deleteUser(User user) {
 //        userRepository.delete(user);
 //    }

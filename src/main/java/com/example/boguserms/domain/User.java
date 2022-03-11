@@ -24,13 +24,13 @@ public class User {
     @GenericGenerator(name = "UUID", strategy ="org.hibernate.id.UUIDGenerator")
     private UUID userId;
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     private String login;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "firstName")
