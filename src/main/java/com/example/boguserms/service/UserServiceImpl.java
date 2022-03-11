@@ -66,10 +66,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateOauthUser(OAuthUserDTO oAuthUserDTO) {
-        User user = userRepository.findByLogin(oAuthUserDTO.getEmail());
-        if (Objects.isNull(user)) {
-            user = userMapper.oAuthDTOToUser(oAuthUserDTO);
-        }
+        User user = userRepository.findByLogin(oAuthUserDTO.getEmail())
+                .orElse(userMapper.oAuthDTOToUser(oAuthUserDTO));
         return userMapper.UserToUserResponseDTO(userRepository.save(user));
     }
 
