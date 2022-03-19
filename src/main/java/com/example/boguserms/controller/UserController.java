@@ -1,9 +1,6 @@
 package com.example.boguserms.controller;
 
-import com.example.boguserms.dto.LoginSearchResponseDTO;
-import com.example.boguserms.dto.OAuthUserDTO;
-import com.example.boguserms.dto.UserRequestDTO;
-import com.example.boguserms.dto.UserResponseDTO;
+import com.example.boguserms.dto.*;
 import com.example.boguserms.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +43,11 @@ public class UserController {
     @GetMapping
     public ResponseEntity<LoginSearchResponseDTO> getUserByLogin(@RequestParam(value = "login") String login) {
         return ResponseEntity.ok().body(userService.findByUserLogin(login));
+    }
+
+    @GetMapping(path = "/details")
+    public ResponseEntity<UserDetailsDTO> getUserDetailsByLogin(@RequestParam(value = "login") String login) {
+        return ResponseEntity.ok().body(userService.findUserDetailsByLogin(login));
     }
 
     @PostMapping("/oauth")

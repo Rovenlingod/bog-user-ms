@@ -1,19 +1,18 @@
 package com.example.boguserms.service;
 
 import com.example.boguserms.domain.User;
-import com.example.boguserms.dto.LoginSearchResponseDTO;
-import com.example.boguserms.dto.OAuthUserDTO;
-import com.example.boguserms.dto.UserRequestDTO;
-import com.example.boguserms.dto.UserResponseDTO;
+import com.example.boguserms.dto.*;
 import com.example.boguserms.exception.InvalidUUIDException;
 import com.example.boguserms.exception.NonexistentUserException;
 import com.example.boguserms.exception.UserAlreadyExistsException;
 import com.example.boguserms.mapper.UserMapper;
 import com.example.boguserms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -35,7 +34,8 @@ public class UserServiceImpl implements UserService {
         try {
             User user = userRepository
                     .findById(UUID.fromString(userId))
-                    .orElseThrow(() -> new NonexistentUserException("User with id = " + userId + " does not exist"));
+                    //.orElseThrow(() -> new NonexistentUserException("User with id = " + userId + " does not exist"));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id = " + userId + " does not exist"));
             return userMapper.UserToUserResponseDTO(user);
         } catch (IllegalArgumentException illegalArgumentException) {
             throw new InvalidUUIDException("User id is invalid!");
@@ -46,7 +46,8 @@ public class UserServiceImpl implements UserService {
     public LoginSearchResponseDTO findByUserLogin(String login) {
         User user = userRepository
                 .findByLogin(login)
-                .orElseThrow(() -> new NonexistentUserException("User with login = " + login + " does not exist"));
+                //.orElseThrow(() -> new NonexistentUserException("User with login = " + login + " does not exist"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with login = " + login + " does not exist"));
         return userMapper.toLoginDTO(user);
     }
 
@@ -69,6 +70,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(oAuthUserDTO.getEmail())
                 .orElse(userMapper.oAuthDTOToUser(oAuthUserDTO));
         return userMapper.UserToUserResponseDTO(userRepository.save(user));
+    }
+
+    @Override
+    public UserDetailsDTO findUserDetailsByLogin(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with login = " + login + " does not exist"));
+        return userMapper.userToUserDetailsDTO(user);
     }
 
     //    @Override
