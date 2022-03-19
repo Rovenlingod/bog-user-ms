@@ -1,10 +1,7 @@
 package com.example.boguserms.service;
 
 import com.example.boguserms.domain.User;
-import com.example.boguserms.dto.LoginSearchResponseDTO;
-import com.example.boguserms.dto.OAuthUserDTO;
-import com.example.boguserms.dto.UserRequestDTO;
-import com.example.boguserms.dto.UserResponseDTO;
+import com.example.boguserms.dto.*;
 import com.example.boguserms.exception.InvalidUUIDException;
 import com.example.boguserms.exception.NonexistentUserException;
 import com.example.boguserms.exception.UserAlreadyExistsException;
@@ -73,6 +70,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLogin(oAuthUserDTO.getEmail())
                 .orElse(userMapper.oAuthDTOToUser(oAuthUserDTO));
         return userMapper.UserToUserResponseDTO(userRepository.save(user));
+    }
+
+    @Override
+    public UserDetailsDTO findUserDetailsByLogin(String login) {
+        User user = userRepository.findByLogin(login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with login = " + login + " does not exist"));
+        return userMapper.userToUserDetailsDTO(user);
     }
 
     //    @Override

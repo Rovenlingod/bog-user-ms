@@ -1,14 +1,12 @@
 package com.example.boguserms.service;
 
 import com.example.boguserms.domain.User;
-import com.example.boguserms.dto.LoginSearchResponseDTO;
-import com.example.boguserms.dto.OAuthUserDTO;
-import com.example.boguserms.dto.UserRequestDTO;
-import com.example.boguserms.dto.UserResponseDTO;
+import com.example.boguserms.dto.*;
 
 public interface UserService {
     UserResponseDTO findByUserId(String userId);
     LoginSearchResponseDTO findByUserLogin(String login);
+    UserDetailsDTO findUserDetailsByLogin(String login);
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
     UserResponseDTO updateUser(UserRequestDTO userRequestDTO);
     UserResponseDTO updateOauthUser(OAuthUserDTO oAuthUserDTO);
