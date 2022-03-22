@@ -3,6 +3,7 @@ package com.example.boguserms.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.validation.constraints.*;
 
@@ -15,6 +16,7 @@ public class UserRequestDTO {
 
     @NotBlank(message = "- Password is mandatory")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!?])(?=\\S+$).{6,}$", message = "- Password must contain at least one letter, one digit and one symbol")
+    @ToString.Exclude
     private String password;
 
     @Email(message = "- String field must be a valid email address")

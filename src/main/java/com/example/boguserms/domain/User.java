@@ -2,14 +2,10 @@ package com.example.boguserms.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +23,7 @@ public class User {
     @Column(name = "login", unique = true)
     private String login;
 
+    @ToString.Exclude
     @Column(name = "password")
     private String password;
 
