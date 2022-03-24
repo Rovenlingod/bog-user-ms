@@ -1,15 +1,13 @@
 package com.example.boguserms.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserRequestDTO {
     @NotBlank(message = "- Login is mandatory")
     private String login;

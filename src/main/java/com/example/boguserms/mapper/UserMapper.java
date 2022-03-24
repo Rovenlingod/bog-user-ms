@@ -19,7 +19,7 @@ public abstract class UserMapper {
 
 
     @Mapping(target = "userId", expression = "java(user.getUserId().toString())")
-    public abstract UserResponseDTO UserToUserResponseDTO(User user);
+    public abstract UserResponseDTO userToUserResponseDTO(User user);
 
     @Mappings({
             @Mapping(target = "id", expression = "java(user.getUserId().toString())"),
@@ -28,7 +28,7 @@ public abstract class UserMapper {
     public abstract LoginSearchResponseDTO toLoginDTO(User user);
 
     @Mapping(target = "password", source = "password", qualifiedByName = "encryptPassword")
-    public abstract User UserRequestDTOToUser(UserRequestDTO userRequestDTO);
+    public abstract User userRequestDTOToUser(UserRequestDTO userRequestDTO);
 
     @Mappings({
             @Mapping(target = "login", source = "email"),
