@@ -17,7 +17,8 @@ public class UserRequestDTO {
     @ToString.Exclude
     private String password;
 
-    @Email(message = "- String field must be a valid email address")
+    @Email(message = "- String field must be a valid email address") // marks test@test type email as valid
+    @Pattern(regexp=".+@.+\\..+", message="Please provide a valid email address")
     @NotBlank(message = "Email is mandatory")
     private String email;
 
